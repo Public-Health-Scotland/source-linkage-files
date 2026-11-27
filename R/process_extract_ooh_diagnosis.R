@@ -11,9 +11,9 @@
 #' @family process extracts
 
 process_extract_ooh_diagnosis <- function(
-    data,
-    year,
-    readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
+  data,
+  year,
+  readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
 ) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-d", year = year)
 
@@ -64,13 +64,13 @@ process_extract_ooh_diagnosis <- function(
     # Check the output for any bad Read codes and try and fix by adding exceptions
     dplyr::mutate(
       readcode = dplyr::if_else(is.na(.data$full_match_2),
-                                dplyr::case_when(
-                                  .data$readcode == "Xa1m." ~ "S349",
-                                  .data$readcode == "Xa1mz" ~ "S349",
-                                  .data$readcode == "HO6.." ~ "H06..",
-                                  .data$readcode == "zV6.." ~ "ZV6..",
-                                  TRUE ~ .data$readcode
-                                ), .data$readcode
+        dplyr::case_when(
+          .data$readcode == "Xa1m." ~ "S349",
+          .data$readcode == "Xa1mz" ~ "S349",
+          .data$readcode == "HO6.." ~ "H06..",
+          .data$readcode == "zV6.." ~ "ZV6..",
+          TRUE ~ .data$readcode
+        ), .data$readcode
       )
     ) %>%
     # Join to readcode lookup again to check

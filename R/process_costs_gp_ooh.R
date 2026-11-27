@@ -40,17 +40,17 @@ process_costs_gp_ooh <- function(ooh_raw_costs = get_gp_ooh_raw_costs_data(BYOC_
     dplyr::bind_rows(
       gp_ooh_costs,
       purrr::map(1:5, ~
-                   gp_ooh_costs %>%
-                   dplyr::filter(year == latest_cost_year) %>%
-                   dplyr::group_by(year, HB2019, Board_Name) %>%
-                   dplyr::summarise(
-                     cost_per_consultation = cost_per_consultation * (1.01)^.x,
-                     .groups = "drop"
-                   ) %>%
-                   dplyr::mutate(
-                     year = (as.numeric(convert_fyyear_to_year(year)) + .x) %>%
-                       convert_year_to_fyyear()
-                   ))
+        gp_ooh_costs %>%
+          dplyr::filter(year == latest_cost_year) %>%
+          dplyr::group_by(year, HB2019, Board_Name) %>%
+          dplyr::summarise(
+            cost_per_consultation = cost_per_consultation * (1.01)^.x,
+            .groups = "drop"
+          ) %>%
+          dplyr::mutate(
+            year = (as.numeric(convert_fyyear_to_year(year)) + .x) %>%
+              convert_year_to_fyyear()
+          ))
     ) %>%
     dplyr::arrange(year, HB2019, Board_Name)
 

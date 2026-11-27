@@ -9,10 +9,10 @@
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 get_nsu_data <- function(
-    year,
-    denodo_connect = denodo_connect,
-    BYOC_MODE
-  ) {
+  year,
+  denodo_connect = denodo_connect,
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "nsu", year = year)
 
   # Specify years available for running
@@ -52,4 +52,3 @@ get_nsu_data <- function(
 
   return(nsu_data)
 }
-

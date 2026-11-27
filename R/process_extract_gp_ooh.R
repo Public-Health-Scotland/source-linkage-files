@@ -21,21 +21,21 @@
 #' @export
 #' @family process extracts
 process_extract_gp_ooh <- function(
-    year,
-    ooh_consultations,
-    ooh_diagnosis,
-    ooh_outcomes,
-    readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE),
-    gp_ooh_cup = read_extract_gp_ooh_cup(
-      year = year,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    ),
-    ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)), # TODO: Use get_sdl_processed_data
-    write_to_disk = TRUE,
-    BYOC_MODE = FALSE,
-    run_id = NA,
-    run_date_time = NA
+  year,
+  ooh_consultations,
+  ooh_diagnosis,
+  ooh_outcomes,
+  readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE),
+  gp_ooh_cup = read_extract_gp_ooh_cup(
+    year = year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)), # TODO: Use get_sdl_processed_data
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh", year = year)
 
@@ -121,11 +121,11 @@ process_extract_gp_ooh <- function(
   ## Link CUP Marker -----
   ooh_clean <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup,
-                     by = dplyr::join_by(
-                       "ooh_case_id",
-                       "record_keydate1",
-                       "keytime1"
-                     )
+      by = dplyr::join_by(
+        "ooh_case_id",
+        "record_keydate1",
+        "keytime1"
+      )
     )
 
   ooh_clean <- ooh_clean %>%

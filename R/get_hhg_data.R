@@ -9,10 +9,10 @@
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 get_hhg_data <- function(
-    year,
-    denodo_connect = denodo_connect,
-    BYOC_MODE
-  ) {
+  year,
+  denodo_connect = denodo_connect,
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "hhg", year = "all")
 
   # Specify years available for running

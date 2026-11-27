@@ -28,7 +28,7 @@ get_uk_postcode_data <- function(
       pcd = "pcd"
     ) %>%
     # Collect
-    dplyr::collect()  %>%
+    dplyr::collect() %>%
     # Convert "NA" to NA
     dplyr::mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
