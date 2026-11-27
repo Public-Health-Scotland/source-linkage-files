@@ -199,25 +199,25 @@ get_sdl_processed_data <- function(
         dbplyr::in_schema("sdl", "sdl_pis_static")
       ) %>%
         dplyr::collect()
-    }else{
-    data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema(
-        "sdl",
-        get_sdl_names(
-          dataset = type,
-          version = "processed"
+    } else {
+      data <- dplyr::tbl(
+        denodo_connect,
+        dbplyr::in_schema(
+          "sdl",
+          get_sdl_names(
+            dataset = type,
+            version = "processed"
+          )
         )
-      )
-    ) %>%
-      dplyr::collect() %>%
-      dplyr::filter(.data$run_id == .env$run_id) %>%
-      dplyr::mutate(
-        dplyr::across(
-          where(~ inherits(.x, "integer64")),
-          as.double
+      ) %>%
+        dplyr::collect() %>%
+        dplyr::filter(.data$run_id == .env$run_id) %>%
+        dplyr::mutate(
+          dplyr::across(
+            where(~ inherits(.x, "integer64")),
+            as.double
+          )
         )
-      )
     }
   }
 
