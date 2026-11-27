@@ -36,6 +36,7 @@ day, which allows us to run the tests multiple times in the same update.
 produce_test_comparison
 
 Other test functions:
+\code{\link[=format_stacked_tests]{format_stacked_tests()}},
 \code{\link[=format_test_excel]{format_test_excel()}},
 \code{\link[=get_existing_data_for_tests]{get_existing_data_for_tests()}},
 \code{\link[=get_previous_extract]{get_previous_extract()}},

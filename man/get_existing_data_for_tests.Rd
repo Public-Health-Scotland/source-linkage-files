@@ -47,6 +47,7 @@ use, the year, recid and variable names from the
 produce_source_extract_tests
 
 Other test functions:
+\code{\link[=format_stacked_tests]{format_stacked_tests()}},
 \code{\link[=format_test_excel]{format_test_excel()}},
 \code{\link[=get_previous_extract]{get_previous_extract()}},
 \code{\link[=produce_test_comparison]{produce_test_comparison()}},

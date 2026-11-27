@@ -33,6 +33,7 @@ Get a previous extract relevant from Denodo using the run_id.
 get_existing_data_for_tests
 
 Other test functions:
+\code{\link[=format_stacked_tests]{format_stacked_tests()}},
 \code{\link[=format_test_excel]{format_test_excel()}},
 \code{\link[=get_existing_data_for_tests]{get_existing_data_for_tests()}},
 \code{\link[=produce_test_comparison]{produce_test_comparison()}},

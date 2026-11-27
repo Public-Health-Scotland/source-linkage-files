@@ -6,7 +6,7 @@
 \usage{
 write_stacked_test_results(
   test_results,
-  test_type = c("extract", "lookup", "ep", "ind"),
+  test_type = c("extract", "ep", "ind"),
   BYOC_MODE
 )
 }

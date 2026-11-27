@@ -4,10 +4,7 @@
 \alias{get_test_results_path}
 \title{Test results output path}
 \usage{
-get_test_results_path(
-  test_type = c("extract", "lookup", "ep", "ind"),
-  BYOC_MODE
-)
+get_test_results_path(test_type = c("extract", "ep", "ind"), BYOC_MODE)
 }
 \arguments{
 \item{test_type}{Test results category}
