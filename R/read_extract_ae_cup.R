@@ -10,6 +10,7 @@ read_extract_ae_cup <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "ae_cup", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -18,16 +19,20 @@ read_extract_ae_cup <- function(
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+  # Read extract
   ae_cup_file <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_ae_ucd_cup_source")
   ) %>%
+    # Filter by calendar year
     dplyr::filter(
       ed_arrival_financial_year == c_year,
       (significant_facility_code == "32" | is.na(significant_facility_code))
     ) %>%
+    # Rename variables
     dplyr::select(
       record_keydate1 = "ed_arrival_date",
       keytime1 = "ed_arrival_time",
@@ -37,7 +42,10 @@ read_extract_ae_cup <- function(
       cup_marker = "cup_marker",
       cup_pathway = "cup_pathway_name"
     ) %>%
-    dplyr::collect()
+    # Collect
+    dplyr::collect() %>%
+    # Convert " " to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " ")))
 
   log_slf_event(stage = "read", status = "complete", type = "ae_cup", year = year)
 

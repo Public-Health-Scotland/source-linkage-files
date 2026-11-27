@@ -69,8 +69,11 @@ read_extract_outpatients <- function(
       commhosp = "community_hospital_flag",
       cost_total_net = "total_net_cost"
     ) %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "outpatient", year = year)

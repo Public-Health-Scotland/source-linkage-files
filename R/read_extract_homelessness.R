@@ -59,8 +59,11 @@ read_extract_homelessness <- function(
       refused = "refused",
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "homelessness", year = year)

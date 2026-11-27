@@ -44,8 +44,11 @@ read_extract_acute_cup <- function(
       cup_pathway = "cup_pathway_name"
     ) %>%
     dplyr::distinct() %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "acute_cup", year = year)

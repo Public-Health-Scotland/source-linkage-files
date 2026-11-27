@@ -31,7 +31,9 @@ get_hc_raw_costs_data <- function(
       hourly_cost = "hourly_cost"
     ) %>%
     # Collect
-    dplyr::collect()
+    dplyr::collect() %>%
+    # Convert "NA" to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
   log_slf_event(stage = "read", status = "complete", type = "hc_costs", year = "all")
 

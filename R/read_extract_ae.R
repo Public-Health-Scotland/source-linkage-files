@@ -11,6 +11,7 @@ read_extract_ae <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "ae", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -19,6 +20,7 @@ read_extract_ae <- function(
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Read Extract
@@ -26,10 +28,12 @@ read_extract_ae <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
   ) %>%
+    # Filter by calendar year
     dplyr::filter(
       arrival_financial_year == c_year,
       significant_facility_code == "32" | is.na(significant_facility_code)
     ) %>%
+    # Rename variables
     dplyr::select(
       record_keydate1 = "arrival_date",
       record_keydate2 = "dat_date",
@@ -68,7 +72,11 @@ read_extract_ae <- function(
       postcode_chi = "postcode_chi",
       commhosp = "community_hospital_flag"
     ) %>%
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "ae", year = year)

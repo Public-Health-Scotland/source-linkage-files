@@ -107,8 +107,11 @@ read_extract_acute <- function(
       uri = "unique_record_id",
       lineno = "lineno"
     ) %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "acute", year = year)

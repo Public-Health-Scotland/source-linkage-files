@@ -30,6 +30,8 @@ get_gpprac_ref_data <- function(
     ) %>%
     # Collect
     dplyr::collect() %>%
+    # Convert "NA" to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, "NA"))) %>%
     dplyr::mutate(
       pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
     )

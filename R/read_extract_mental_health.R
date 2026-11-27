@@ -91,8 +91,11 @@ read_extract_mental_health <- function(
       commhosp = "community_hospital_flag",
       uri = "unique_record_id"
     ) %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi") %>%
     # Replace NA in cost_total_net with 0
     dplyr::mutate(

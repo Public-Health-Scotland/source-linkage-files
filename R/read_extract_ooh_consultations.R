@@ -10,6 +10,7 @@ read_extract_ooh_consultations <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh-c", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -18,20 +19,20 @@ read_extract_ooh_consultations <- function(
     return(tibble::tibble())
   }
 
-  # Disconnect from Denodo
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Read consultations data
+  # Read extract
   consultations_extract <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_gp_ooh_consultation_source")
   ) %>%
-    # Filter to match BOXI extraction
+    # Filter by calendar year
     dplyr::filter(
       sc_start_financial_year == c_year,
       out_of_hours_services_flag == "Y"
     ) %>%
-    # rename variables
+    # Rename variables
     dplyr::select(
       chi = "patient_chi",
       dob = "patient_dob",
@@ -53,11 +54,12 @@ read_extract_ooh_consultations <- function(
       consultation_type_unmapped = "consultation_type_unmapped"
     ) %>%
     dplyr::distinct() %>%
+    # Collect
     dplyr::collect() %>%
-    # Restore CHI leading zero
-    dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
-    # change back to anon_chi
-    slfhelper::get_anon_chi()
+    # Convert " " to NA
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
+    slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-c", year = year)
 

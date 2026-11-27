@@ -100,6 +100,19 @@ list(
     )
   ),
 
+  ### Readcode Lookup ----------------------------------------------------------
+  # (GP OOH Diagnosis)
+  # GET - Readcode Lookup
+  tar_target(
+    # Target name
+    readcode_lookup,
+    # Function
+    get_readcode_lookup(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
   ### Local Authority Open Data ------------------------------------------------
   # (Homelessness, Home Care Costs)
   # GET - Local Authority Open Data
@@ -229,13 +242,24 @@ list(
   ),
 
   ### GP Out of Hours Costs ----------------------------------------------------
+  # GET - GP Out of Hours Costs
+  tar_target(
+    # Target name
+    gp_ooh_raw_costs,
+    # Function
+    get_gp_ooh_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
   # PROCESS - GP Out of Hours Costs
   tar_target(
     # Target name
     gp_ooh_cost_lookup,
     # Function
     process_costs_gp_ooh(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      ooh_raw_costs = gp_ooh_raw_costs,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
@@ -736,35 +760,63 @@ list(
     ),
 
     ### GP Out of Hours (GP OOH) -----------------------------------------------
-    # READ - GP Out of Hours (GP OOH)
-    tar_qs(
-      # Target name
-      ooh_data,
-      # Function
-      read_extract_gp_ooh(
-        year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = NULL
-      )
-    ),
-    # READ - GP Out of Hours (GP OOH) CUP
+    # READ - GP OOH Consultations
     tar_target(
-      gp_ooh_cup,
-      read_extract_gp_ooh_cup(
-        year,
+      # Target name
+      ooh_consultations_data,
+      # Function
+      read_extract_ooh_consultations(
+        year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # PROCESS - GP Out of Hours (GP OOH)
+    # READ - GP OOH Diagnosis
+    tar_target(
+      # Target name
+      ooh_diagnosis_data,
+      # Function
+      read_extract_ooh_diagnosis(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - GP OOH Outcomes
+    tar_target(
+      # Target name
+      ooh_outcomes_data,
+      # Function
+      read_extract_ooh_outcomes(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - GP OOH CUP
+    tar_target(
+      # Target name
+      gp_ooh_cup,
+      # Function
+      read_extract_gp_ooh_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - GP Out of Hours
     tar_target(
       # Target name
       source_ooh_extract,
       # Function
       process_extract_gp_ooh(
         year = year,
-        data_list = ooh_data,
+        ooh_consultations = ooh_consultations_data,
+        ooh_diagnosis = ooh_diagnosis_data,
+        ooh_outcomes = ooh_outcomes_data,
+        readcode_lookup = readcode_lookup,
         gp_ooh_cup = gp_ooh_cup,
+        ooh_cost_lookup = gp_ooh_cost_lookup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
