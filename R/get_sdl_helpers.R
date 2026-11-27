@@ -28,7 +28,7 @@ get_sdl_names <- function(dataset, version) {
     "ooh_costs", "sdl_ooh_cost_lookup_source", NA_character_, NA_character_,
 
     # CMH
-    "cmh", "sdl_cmh_source", NA_character_, NA_character_,
+    "cmh", "sdl_cmh_source", NA_character_, "sdl_cmh_processed",
 
     # Deaths
     "chi_deaths", "sdl_chi_deaths_source", "sdl_chi_deaths_snapshot", "sdl_chi_deaths_processed",
@@ -153,15 +153,6 @@ get_sdl_processed_data <- function(
 
   year <- check_year_format(year)
 
-  if (type == "pis") {
-    data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_pis_static")
-    ) %>%
-      dplyr::collect()
-  }
-
-
   if (isFALSE(BYOC_MODE)) {
     if (type == "ltc") {
       data <- read_file(get_ltcs_path(year, BYOC_MODE = BYOC_MODE))
@@ -202,6 +193,13 @@ get_sdl_processed_data <- function(
       add = TRUE
     )
 
+    if (type == "pis") {
+      data <- dplyr::tbl(
+        denodo_connect,
+        dbplyr::in_schema("sdl", "sdl_pis_static")
+      ) %>%
+        dplyr::collect()
+    }else{
     data <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema(
@@ -220,6 +218,7 @@ get_sdl_processed_data <- function(
           as.double
         )
       )
+    }
   }
 
   return(data)

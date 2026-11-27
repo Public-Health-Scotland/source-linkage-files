@@ -4,7 +4,7 @@
 \alias{get_processed_data_list}
 \title{Get SDL Processed Data list for episode file}
 \usage{
-get_processed_data_list(year, type, BYOC_MODE, run_id = run_id)
+get_processed_data_list(year, type, BYOC_MODE, run_id)
 }
 \arguments{
 \item{year}{Financial year.}
