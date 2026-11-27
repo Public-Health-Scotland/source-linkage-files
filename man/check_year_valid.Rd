@@ -6,15 +6,18 @@
 \usage{
 check_year_valid(
   year,
-  type = c("acute", "acute_cup", "ae", "ae_cup", "at", "ch", "client", "cmh", "cost_dna",
-    "dd", "nrs_deaths", "dn", "gpooh", "hc", "homelessness", "hhg", "maternity", "mh",
-    "nsu", "outpatients", "pis", "sds", "sparra")
+  type = c("acute", "ae", "at", "ch", "client", "cmh", "cost_dna", "dd", "deaths", "dn",
+    "gpooh", "hc", "homelessness", "hhg", "maternity", "mh", "nsu", "outpatients", "pis",
+    "sds", "sparra"),
+  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE)
 )
 }
 \arguments{
 \item{year}{Financial year}
 
 \item{type}{name of extract}
+
+\item{denodo_connect}{Connection to denodo database}
 }
 \value{
 A logical TRUE/FALSE

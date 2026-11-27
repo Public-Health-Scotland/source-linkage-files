@@ -45,75 +45,62 @@ end_date <- function() {
 #'
 #' @param year Financial year
 #' @param type name of extract
+#' @param denodo_connect Connection to denodo database
 #'
 #' @return A logical TRUE/FALSE
-check_year_valid <- function(
-  year,
-  type = c(
-    "acute",
-    "acute_cup",
-    "ae",
-    "ae_cup",
-    "at",
-    "ch",
-    "client",
-    "cmh",
-    "cost_dna",
-    "dd",
-    "nrs_deaths",
-    "dn",
-    "gpooh",
-    "hc",
-    "homelessness",
-    "hhg",
-    "maternity",
-    "mh",
-    "nsu",
-    "outpatients",
-    "pis",
-    "sds",
-    "sparra"
-  )
-) {
-  ## MANUALLY UPDATE ##
-  # Check extracts which we do not have data for and ensure this is picked up
-  # by the following code:
-  # DN starts in 2015/16
-  # SPARRA starts in 2015/16
-  if (year <= "1415" && all(type %in% c("dn", "sparra"))) {
-    return(FALSE)
-    # CMH starts in 2016/17
-    # Homelessness starts in 2016/17
-    # DD starts in 2016/17
-  } else if (year <= "1516" && all(type %in% c("cmh", "homelessness", "dd"))) {
-    return(FALSE)
-    # Social Care data sets start in 2017/18 Q4
-    # Cost_DNAs start in 2017/18
-  } else if (year <= "1617" && all(type %in% c("ch", "hc", "sds", "at", "client", "cost_dna"))) {
-    return(FALSE)
-    # HHG starts in 2018/19
-  } else if (year <= "1718" && all(type %in% "hhg")) {
-    return(FALSE)
-    # CMH stops in 2020/21
-    # DN stops in 2020/21
-  } else if (year >= "2122" && all(type %in% c("cmh", "dn"))) {
-    return(FALSE)
-    # HHG stops in 2022/23
-  } else if (year >= "2324" && all(type %in% "hhg")) {
-    return(FALSE)
-    ## CHECK - what is the latest NSU cohort available?
-    # NSU is currently available for 2024/25
-    ## CHECK - What period does SDS data get submitted?
-    ## CHECK - what data do we have available for Social Care and SPARRA?
-  } else if (year >= "2526" &&
-    all(type %in% c("nsu", "sds", "at", "ch", "hc", "client"))) {
-    return(FALSE)
-  } else if (year >= "2627" &&
-    all(type %in% c("sparra"))) {
-    return(FALSE)
-  }
+check_year_valid <- function(year,
+                             type = c(
+                               "acute",
+                               "ae",
+                               "at",
+                               "ch",
+                               "client",
+                               "cmh",
+                               "cost_dna",
+                               "dd",
+                               "deaths",
+                               "dn",
+                               "gpooh",
+                               "hc",
+                               "homelessness",
+                               "hhg",
+                               "maternity",
+                               "mh",
+                               "nsu",
+                               "outpatients",
+                               "pis",
+                               "sds",
+                               "sparra"
+                             ),
+                             denodo_connect = get_denodo_connection(BYOC_MODE = FALSE)) {
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  return(TRUE)
+  # Extract the data availability table from Denodo
+  # availability_table <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_byoc_data_year_coverage")
+  # ) %>%
+  #   dplyr::collect()
+
+  # TEMP - read in csv file as not everything is updated in the denodo table
+  availability_table <- readr::read_csv("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/3_dataset_processing/dataset_availability.csv")
+
+  # Convert financial year, e.g. "1920" -> 2019
+  year_start <- convert_fyyear_to_year(year)
+
+
+  dataset_availability <- availability_table %>%
+    dplyr::filter(.data$type %in% .env$type) %>%
+    dplyr::distinct(.data$type, .keep_all = TRUE)
+
+  result <- dataset_availability %>%
+    dplyr::mutate(
+      valid = year_start >= .data$start &
+        (is.na(.data$end) | year_start <= .data$end)
+    )
+
+  all(result$valid)
 }
 
 #-------------------------------------------------------------------------------
