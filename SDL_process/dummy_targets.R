@@ -77,7 +77,7 @@ tar_option_set(
 
 # Define years and test type
 years_to_run <- "1920"
-benchmark_run_id <- 2
+benchmark_run_id <- 3
 benchmark_comparison_type <- "extract"
 
 ################################################################################ .

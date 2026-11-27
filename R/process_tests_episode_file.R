@@ -3,7 +3,7 @@
 #' @description Takes the processed episode file and produces
 #' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
-#' @inherit process_tests_acute
+#' @inherit process_tests
 #'
 #' @export
 process_tests_episode_file <- function(data,

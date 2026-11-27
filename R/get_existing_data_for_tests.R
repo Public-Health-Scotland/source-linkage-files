@@ -133,7 +133,7 @@ get_existing_data_for_tests <- function(
       slf_data <- get_previous_extract(
         type = type,
         year = year,
-        benchmark_run_id = benchmark_run_id,
+        run_id = benchmark_run_id,
         denodo_connect = denodo_connect,
         BYOC_MODE = BYOC_MODE
       )
