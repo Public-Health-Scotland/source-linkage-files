@@ -25,7 +25,7 @@ process_lookup_postcode <- function(
   run_id = NA,
   run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
+  log_slf_event(stage = "process", status = "start", type = "postcode_lookup", year = "all")
 
   # Process lookups -------------------------------------------------------
 
@@ -118,7 +118,7 @@ process_lookup_postcode <- function(
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "slf_pc_lookup", year = "all")
+  log_slf_event(stage = "process", status = "complete", type = "postcode_lookup", year = "all")
 
   return(slf_pc_lookup)
 }

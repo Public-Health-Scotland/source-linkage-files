@@ -11,7 +11,7 @@ read_it_chi_deaths <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-  log_slf_event(stage = "read", status = "start", type = "it_chi_deaths", year = "all")
+  log_slf_event(stage = "read", status = "start", type = "chi_deaths", year = "all")
 
   # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
@@ -36,7 +36,7 @@ read_it_chi_deaths <- function(
       death_date_chi = lubridate::as_date(.data$death_date_chi)
     )
 
-  log_slf_event(stage = "read", status = "complete", type = "it_chi_deaths", year = "all")
+  log_slf_event(stage = "read", status = "complete", type = "chi_deaths", year = "all")
 
   return(it_chi_deaths)
 }

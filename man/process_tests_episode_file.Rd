@@ -4,15 +4,27 @@
 \alias{process_tests_episode_file}
 \title{Process Episode file tests}
 \usage{
-process_tests_episode_file(data, year)
+process_tests_episode_file(
+  data,
+  year,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+\item{data}{Data to test}
 
-\item{year}{the financial year of the extract in the format '1718'.}
-}
-\value{
-a \link[tibble:tibble-package]{tibble} containing a test comparison.
+\item{year}{Financial year}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{benchmark_run_id}{benchmark_run_id}
+
+\item{run_id}{run_id}
+
+\item{run_date_time}{run_date_time}
 }
 \description{
 Takes the processed episode file and produces

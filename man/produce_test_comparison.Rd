@@ -24,8 +24,10 @@ and the existing data
 write_tests_xlsx
 
 Other test functions:
+\code{\link[=format_stacked_tests]{format_stacked_tests()}},
 \code{\link[=format_test_excel]{format_test_excel()}},
 \code{\link[=get_existing_data_for_tests]{get_existing_data_for_tests()}},
+\code{\link[=get_previous_extract]{get_previous_extract()}},
 \code{\link[=write_tests_xlsx]{write_tests_xlsx()}}
 }
 \concept{test functions}

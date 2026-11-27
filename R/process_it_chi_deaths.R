@@ -18,7 +18,7 @@ process_it_chi_deaths <- function(data,
                                   BYOC_MODE = FALSE,
                                   run_id = NA,
                                   run_date_time = NA) {
-  log_slf_event(stage = "process", status = "start", type = "it_chi_deaths", year = "all")
+  log_slf_event(stage = "process", status = "start", type = "chi_deaths", year = "all")
 
   # Data Cleaning  ---------------------------------------
 
@@ -54,7 +54,7 @@ process_it_chi_deaths <- function(data,
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "it_chi_deaths", year = "all")
+  log_slf_event(stage = "process", status = "complete", type = "chi_deaths", year = "all")
 
   return(it_chi_deaths_processed)
 }

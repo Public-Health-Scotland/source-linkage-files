@@ -1,0 +1,75 @@
+#' Source Care Home Tests
+#'
+#' @description Produce a set of tests which can be used by Care Home and Home Care
+#' This will produce counts of various demographics
+#' using [create_demog_test_flags()] counts of episodes for every `hbtreatcode`
+#' using [create_lca_test_flags()]
+#' It will also produce various summary statistics for bedday, cost and
+#' episode date variables.
+#'
+#' @param data new or old data for testing summary flags
+#' (data is from [get_source_extract_path()])
+#' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
+#' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
+#'
+#' @return a dataframe with a count of each flag
+#' from [calculate_measures()]
+#'
+#' @family extract test functions
+#' @seealso calculate_measures
+produce_source_ch_tests <- function(data,
+                                    sum_mean_vars = c("beddays", "cost", "yearstay"),
+                                    max_min_vars = c(
+                                      "record_keydate1", "record_keydate2",
+                                      "cost_total_net", "yearstay"
+                                    )) {
+  # pre-calculate values before applying distinct count which makes NA == 1
+  n_missing_chi_total <- sum(is.na(data$anon_chi))
+  n_missing_dob_total <- sum(is.na(data$dob))
+  n_missing_postcode_total <- sum(is.na(data$postcode))
+
+  test_flags <- data %>%
+    dplyr::arrange(.data$anon_chi) %>%
+    dplyr::distinct(.data$anon_chi, .data$social_care_id, .keep_all = TRUE) %>%
+    # use functions to create HB and partnership flags
+    create_demog_test_flags() %>%
+    dplyr::mutate(
+      n_episodes = 1L,
+      ch_name_missing = is.na(.data$ch_name),
+      ch_provider_1_to_5 = dplyr::case_when(
+        .data$ch_provider %in% c("1", "2", "3", "4", "5") ~ 1L,
+        TRUE ~ 0L
+      ),
+      ch_provider_other = .data$ch_provider == "6",
+      ch_adm_reason_missing = is.na(.data$ch_adm_reason)
+    ) %>%
+    create_lca_client_test_flags(.data$sc_send_lca) %>%
+    # keep variables for comparison
+    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
+    # use function to sum new test flags
+    calculate_measures(measure = "sum") %>%
+    # replace distinct measures with the correct sum of NAs
+    dplyr::mutate(
+      value = dplyr::case_when(
+        measure == "n_missing_chi" ~ as.numeric(n_missing_chi_total),
+        measure == "missing_dob" ~ as.numeric(n_missing_dob_total),
+        measure == "n_missing_postcode" ~ as.numeric(n_missing_postcode_total),
+        TRUE ~ value
+      )
+    )
+
+  all_measures <- data %>%
+    calculate_measures(vars = {{ sum_mean_vars }}, measure = "all")
+
+  min_max <- data %>%
+    calculate_measures(vars = {{ max_min_vars }}, measure = "min-max")
+
+  join_output <- list(
+    test_flags,
+    all_measures,
+    min_max
+  ) %>%
+    purrr::reduce(dplyr::full_join, by = c("measure", "value"))
+
+  return(join_output)
+}

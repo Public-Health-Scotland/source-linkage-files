@@ -21,7 +21,7 @@ process_costs_home_care <- function(hc_costs_raw = get_hc_raw_costs_data(BYOC_MO
                                     BYOC_MODE = FALSE,
                                     run_id = NA,
                                     run_date_time = NA) {
-  log_slf_event(stage = "process", status = "start", type = "hc_costs", year = "all")
+  log_slf_event(stage = "process", status = "start", type = "hc_cost_lookup", year = "all")
 
   # Data cleaning ---------------------------------------
 
@@ -78,7 +78,7 @@ process_costs_home_care <- function(hc_costs_raw = get_hc_raw_costs_data(BYOC_MO
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
+  log_slf_event(stage = "process", status = "complete", type = "hc_cost_lookup", year = "all")
 
   return(outfile)
 }

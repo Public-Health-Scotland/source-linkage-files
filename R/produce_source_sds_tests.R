@@ -1,0 +1,50 @@
+#' SDS Episodes Tests
+#'
+#' @description Produce the test for the SDS all episodes
+#'
+#' @param data new or old data for testing summary flags
+#' (data is from [get_sc_sds_episodes_path()])
+#' @param max_min_vars variables used when selecting 'min-max'
+#' from [calculate_measures()]
+#' @return a dataframe with a count of each flag.
+#'
+#' @family social care test functions
+produce_source_sds_tests <- function(data,
+                                     BYOC_MODE,
+                                     benchmark_run_id = NA,
+                                     run_id = NA,
+                                     run_date_time = NA,
+                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
+  # pre-calculate values before applying distinct count which makes NA == 1
+  n_missing_chi_total <- sum(is.na(data$anon_chi))
+  n_missing_dob_total <- sum(is.na(data$dob))
+  n_missing_postcode_total <- sum(is.na(data$postcode))
+
+  test_flags <- data %>%
+    dplyr::arrange(.data$anon_chi) %>%
+    dplyr::distinct(.data$anon_chi, .data$social_care_id, .keep_all = TRUE) %>%
+    # create test flags
+    create_demog_test_flags() %>%
+    create_lca_client_test_flags(.data$sc_send_lca) %>%
+    # remove variables that won't be summed
+    dplyr::select("unique_anon_chi":"West_Lothian_clients") %>%
+    # use function to sum new test flags
+    calculate_measures(measure = "sum") %>%
+    # replace distinct measures with the correct sum of NAs
+    dplyr::mutate(
+      value = dplyr::case_when(
+        measure == "n_missing_chi" ~ as.numeric(n_missing_chi_total),
+        measure == "missing_dob" ~ as.numeric(n_missing_dob_total),
+        measure == "n_missing_postcode" ~ as.numeric(n_missing_postcode_total),
+        TRUE ~ value
+      )
+    )
+
+  min_max_measures <- data %>%
+    calculate_measures(vars = max_min_vars, measure = "min-max")
+
+  join_output <- list(test_flags, min_max_measures) %>%
+    purrr::reduce(dplyr::full_join, by = c("measure", "value"))
+
+  return(join_output)
+}

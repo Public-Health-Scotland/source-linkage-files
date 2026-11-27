@@ -7,8 +7,7 @@
 setup_tests_file_name(
   sheet_name,
   year = NULL,
-  workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit",
-    "cross_year"),
+  workbook_name = c("ep_file", "indiv_file", "lookup", "extract"),
   to_combine = TRUE
 )
 }

@@ -33,6 +33,7 @@ Other file path functions:
 \code{\link[=get_ltcs_path]{get_ltcs_path()}},
 \code{\link[=get_nsu_path]{get_nsu_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
+\code{\link[=get_sdl_names]{get_sdl_names()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}},
 \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}

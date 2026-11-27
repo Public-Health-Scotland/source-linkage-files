@@ -7,9 +7,7 @@ setup_tests_file_name <- function(sheet_name,
                                     "ep_file",
                                     "indiv_file",
                                     "lookup",
-                                    "extract",
-                                    "sandpit",
-                                    "cross_year"
+                                    "extract"
                                   ),
                                   to_combine = TRUE) {
   # Set up the workbook ----
@@ -17,10 +15,12 @@ setup_tests_file_name <- function(sheet_name,
     tests_workbook_name <-
       stringr::str_glue(latest_update(), "_{year}_ep_file_tests")
   }
+
   if (workbook_name == "indiv_file") {
     tests_workbook_name <-
       stringr::str_glue(latest_update(), "_{year}_indiv_file_tests")
   }
+
   if (workbook_name == "lookup") {
     if (is.null(year)) {
       tests_workbook_name <-
@@ -34,16 +34,7 @@ setup_tests_file_name <- function(sheet_name,
         )
     }
   }
-  if (workbook_name == "sandpit") {
-    tests_workbook_name <-
-      stringr::str_glue(latest_update(), "_sandpit_extract_tests")
-  }
-  if (workbook_name == "cross_year") {
-    if (is.null(year)) {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_cross_year_tests")
-    }
-  }
+
   if (workbook_name == "extract") {
     tests_workbook_name <- dplyr::if_else(
       to_combine,
@@ -55,11 +46,13 @@ setup_tests_file_name <- function(sheet_name,
     )
   }
 
-  tests_to_combine <- dplyr::if_else((workbook_name %in% c("extract", "lookup")) &
-    to_combine,
-  "to_combine",
-  ""
+  tests_to_combine <- dplyr::if_else(
+    (workbook_name %in% c("extract", "lookup")) &
+      to_combine,
+    "to_combine",
+    ""
   )
+
   folder_path <- fs::path(
     get_slf_dir(),
     "Tests",
@@ -67,6 +60,7 @@ setup_tests_file_name <- function(sheet_name,
     qtr(),
     tests_to_combine
   )
+
   if (!exists(folder_path)) {
     fs::dir_create(folder_path, mode = "u=rwx,go=rwx")
   }
@@ -187,6 +181,7 @@ format_test_excel <- function(comparison_data, wb, sheet_name_dated) {
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
+#' @export
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
@@ -194,10 +189,13 @@ write_tests_xlsx <- function(comparison_data,
                                "ep_file",
                                "indiv_file",
                                "lookup",
-                               "extract",
-                               "sandpit",
-                               "cross_year"
-                             )) {
+                               "extract"
+                             ),
+                             BYOC_MODE = FALSE) {
+  if (isTRUE(BYOC_MODE)) {
+    return(comparison_data)
+  }
+
   # Set up the workbook ----
   tests_file_name <- setup_tests_file_name(sheet_name,
     year,
@@ -324,7 +322,6 @@ combine_tests <- function() {
   lapply(years_to_run(), combine_extracts_tests_year)
 }
 
-
 #' Combine lookup tests to one xlsx file
 combine_lookup_tests <- function() {
   lookup_combined_path <- setup_tests_file_name(
@@ -413,4 +410,153 @@ combine_multi_xlsx <- function(file_list, output_file) {
     }
   }
   openxlsx::saveWorkbook(wb, output_file, overwrite = TRUE)
+}
+
+#' Test results output path
+#'
+#' @param test_type Test results category
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return Path to the test results output
+#' @export
+get_test_results_path <- function(
+  test_type = c("extract", "ep", "ind"),
+  BYOC_MODE
+) {
+  test_type <- match.arg(test_type)
+
+  file_name <- switch(test_type,
+    extract = "sdl_test_results_extract.parquet",
+    ep = "sdl_test_results_ep.parquet",
+    ind = "sdl_test_results_ind.parquet"
+  )
+
+  if (isTRUE(BYOC_MODE)) {
+    test_results_path <- file.path(
+      denodo_output_path(),
+      file_name
+    )
+  } else {
+    test_results_path <- fs::path(
+      get_slf_dir(),
+      "Tests",
+      fy(),
+      qtr(),
+      file_name
+    )
+  }
+
+  return(test_results_path)
+}
+
+#' Stacked test outputs in denodo
+#'
+#' @param test_results Test results data
+#' @param test_type Test type category
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return Test results output
+#' @export
+write_stacked_test_results <- function(
+  test_results,
+  test_type = c("extract", "ep", "ind"),
+  BYOC_MODE
+) {
+  stacked_results <- dplyr::bind_rows(test_results)
+  write_file(
+    data = stacked_results,
+    path = get_test_results_path(
+      test_type = test_type,
+      BYOC_MODE = BYOC_MODE
+    ),
+    BYOC_MODE = BYOC_MODE
+  )
+
+  return(stacked_results)
+}
+
+
+#' Format Stacked Tests
+#'
+#' @description Write stacked test output as an xlsx workbook using write_tests_xlsx.
+#'
+#' @param test_type Extract, episode or individual.
+#' @param test_location Denodo or hscdiip.
+#' @param denodo_connect Connection to Denodo.
+#' @param run_id Identifier for the tests if using Denodo.
+#'
+#' @family test functions
+#' @seealso write_tests_xlsx
+#' @export
+format_stacked_tests <- function(
+  test_type = c("extract", "ep", "ind"),
+  test_location = c("denodo", "hscdiip"),
+  denodo_connect = get_denodo_connection(),
+  run_id = NA
+) {
+  # Check arguments
+  test_type <- match.arg(test_type)
+  test_location <- match.arg(test_location)
+
+  # Get tests from Denodo
+  if (test_location == "denodo") {
+    table_name <- switch(test_type,
+      extract = "sdl_test_results_extract",
+      ep = "sdl_test_results_ep",
+      ind = "sdl_test_results_ind"
+    )
+
+    test_results <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", table_name)
+    ) %>%
+      dplyr::filter(
+        .data$run_id == .env$run_id
+      ) %>%
+      dplyr::collect()
+
+    # Get tests from hscdiip
+  } else {
+    file_name <- switch(test_type,
+      extract = "sdl_test_results_extract.parquet",
+      ep = "sdl_test_results_ep.parquet",
+      ind = "sdl_test_results_ind.parquet"
+    )
+
+    test_results_path <- fs::path(
+      get_slf_dir(),
+      "Tests",
+      fy(),
+      qtr(),
+      file_name
+    )
+
+    test_results <- read_file(test_results_path)
+  }
+
+  # Use stacked test output to create excel formatted outputs
+  test_ids <- test_results %>%
+    dplyr::distinct(year, dataset_name)
+
+  for (i in 1:nrow(test_ids)) {
+    dataset <- test_ids$dataset_name[i]
+    yr <- test_ids$year[i]
+
+    if (yr == "all") {
+      workbook <- "lookup"
+      write_yr <- NULL
+    } else {
+      workbook <- "extract"
+      write_yr <- yr
+    }
+
+    test_results %>%
+      dplyr::filter(
+        .data$year == yr,
+        .data$dataset_name == dataset
+      ) %>%
+      createslf::write_tests_xlsx(dataset, write_yr, workbook)
+  }
+
+  createslf::combine_tests()
 }

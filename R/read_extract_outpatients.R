@@ -8,7 +8,7 @@ read_extract_outpatients <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-  log_slf_event(stage = "read", status = "start", type = "outpatient", year = year)
+  log_slf_event(stage = "read", status = "start", type = "outpatients", year = year)
 
   # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
@@ -73,7 +73,7 @@ read_extract_outpatients <- function(
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
-  log_slf_event(stage = "read", status = "complete", type = "outpatient", year = year)
+  log_slf_event(stage = "read", status = "complete", type = "outpatients", year = year)
 
   return(extract_outpatients)
 }
